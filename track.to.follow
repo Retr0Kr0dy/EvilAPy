@@ -1,0 +1,57 @@
+Step 1 HOW THE HACK SHOULD WORK AND SERVE ;
+
+	- Get the MAC address of the AP to twin.
+		(airodump-ng)
+	- Create a fake AP with the same BSSID as the legitimate AP.
+		(airbase-ng)
+	- Make routing rules. +? max the AP power using txpower 27 (higher is illegal).
+		(ip-table)
+	- Deauth user from legitimate AP.
+		(aircrack-ng)
+	- DONE !!!
+		now can; 
+			- wireshark packet sniffing
+			- deauth
+			- app killing
+			-etx...
+
+Step 2 TREE ;
+
+|¬EvilAPy.py 				(main)			ARGS
+|											
+|¬GetAP.py									no
+|											
+|¬FakeAPGenerator.py						yes
+|											
+|¬RoutingRulesON.py							? ]
+|											  ] both func can go in same file
+|¬RoutingRulesOFF.py						? ]
+|											
+|¬IncreasePower.py 			???				?
+|											
+|¬Deauth.py									yes
+
+
+
+					  Loading		Done
+¬EvilAPy.py				[X]			 []						
+¬GetAP.py				[x]			 [O]
+¬FakeAPGenerator.py		[]			 []		
+¬RoutingRulesON.py		[]			 [] }both function
+¬RoutingRulesOFF.py		[]			 []	}can be in one file
+¬IncreasePower.py 		[]			 []			
+¬Deauth.py 				[X]			 [?]
+
+
+
+
+
+ROUTING COMMAND ;;;
+
+ifconfig at0 up
+ifconfig at0 10.0.0.1 netmask 255.255.255.0
+route add -net 10.0.0.0 netmask 255.255.255.0 gw 10.0.0.1
+iptables -P FORWARD ACCEPT
+iptables -t nat -A POSTROUTING -o wlan0mon -j MASQUERADE
+echo 1 > /proc/sys/net/ipv4/ip_forward
+ifconfig
